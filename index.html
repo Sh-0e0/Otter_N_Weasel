@@ -3,80 +3,94 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#061710">
-<title>수달 vs 족제비 | AI 동물 분류</title>
+<meta name="theme-color" content="#071a13">
+<title>WILDNOTE | 수달과 족제비 찾기</title>
 <style>
-:root{--ink:#f1f8f0;--muted:#9fb3a7;--cream:#061710;--green:#24d69a;--mint:#123b2c;--orange:#f0b36c;--line:#214536;--red:#ff9b88;--bark:#d5e8d9}
+:root{--bg:#071a13;--surface:#10291e;--surface2:#0b2118;--line:#244b37;--text:#eff8ef;--muted:#9bb3a2;--lime:#b5f36b;--mint:#24d99b;--amber:#f0b36c}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 14% 0%,#174a35 0,transparent 35%),radial-gradient(ellipse at 88% 20%,#103d2d 0,transparent 34%),linear-gradient(145deg,#071a12,#03100b 75%);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Noto Sans KR",sans-serif}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:radial-gradient(#b9e6c9 0.6px,transparent .6px);background-size:20px 20px}
-main{position:relative;max-width:1120px;margin:auto;padding:28px 26px 54px}
-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:54px;gap:12px}
-.brand{font-weight:900;letter-spacing:.12em;font-size:14px;color:#effaf0}.brand span{color:#39e7a7}
-.pill{font-family:system-ui,sans-serif;font-size:11px;font-weight:800;letter-spacing:.04em;background:#123b2c!important;padding:9px 14px;border-radius:999px;color:#8df2bd!important;border:1px solid #28634a}
-.hero{text-align:center;margin-bottom:38px;position:relative}
-.eyebrow{font-family:system-ui,sans-serif;font-size:10px;letter-spacing:.25em;font-weight:850;color:#67dfa7;text-transform:uppercase}
-h1{font-size:clamp(38px,6vw,66px);letter-spacing:-.07em;line-height:1.08;margin:15px 0;color:#f1f8f0}
-h1 span{color:#38e6a2!important}
-.hero p{font-family:system-ui,sans-serif;color:#a9beb1;line-height:1.9;margin:16px auto 0;max-width:590px;font-size:14px}
-.animals{display:flex;gap:12px;justify-content:center;margin:26px 0 0;flex-wrap:wrap}
-.animal-chip{display:flex;align-items:center;gap:10px;background:linear-gradient(145deg,#153c2c,#0d2a1e);border:1px solid #285640;padding:11px 19px;border-radius:999px;font-weight:800;color:#eaf8ee;box-shadow:0 8px 24px #0004}
-.animal-chip .emoji{font-size:25px}
-.layout{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:stretch}
-.panel{background:linear-gradient(145deg,rgba(17,48,35,.96),rgba(7,28,19,.97));border:1px solid #28503b;border-radius:28px;padding:25px;box-shadow:0 22px 60px #0005;position:relative;overflow:hidden}
-.panel:before{content:"";position:absolute;top:-65px;right:-45px;width:180px;height:180px;background:radial-gradient(circle,#2bdc9a18,transparent 68%);pointer-events:none}
-.panel h2{font-size:17px;letter-spacing:-.03em;margin:0 0 7px;color:#f0f8f1}.sub{color:#91aa9b;font-size:12px;line-height:1.7;margin:0 0 18px}
-.drop{min-height:310px;border:1.5px dashed #39735a;border-radius:22px;background:linear-gradient(145deg,#0c281b,#102f21);display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;position:relative;overflow:hidden;transition:.2s}
-.drop:after{content:"✳";position:absolute;right:17px;bottom:7px;color:#39745a;font-size:35px;opacity:.45;pointer-events:none}
-.drop.drag{border-color:#42e8a6;background:#123d2a}.drop img{max-width:100%;max-height:360px;object-fit:contain;border-radius:16px;display:none;position:relative;z-index:1}
-.drop-content .big{font-size:44px;margin-bottom:10px}.drop-content strong{display:block;font-size:15px;color:#e7f6e9}.drop-content span{display:block;color:#91aa9b;font-size:12px;margin-top:7px}
-.actions{display:flex;gap:10px;margin-top:14px}
-.btn{border:0;border-radius:999px;padding:14px 19px;font-weight:850;font-size:13px;cursor:pointer;transition:transform .15s,opacity .15s,background .15s;letter-spacing:-.01em}
-.btn:active{transform:scale(.98)}.btn-primary{background:linear-gradient(100deg,#a4f05c,#16d6a1);color:#052016;flex:1;box-shadow:0 7px 24px #16d6a13b}.btn-primary:hover{filter:brightness(1.08)}
-.btn-secondary{background:#183b2b;color:#e1f1e4;border:1px solid #2c5b42}.btn-secondary:hover{background:#204a35}
-.btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
-input[type=file]{display:none}.hint{font-size:11px;color:#8da798;margin-top:12px;line-height:1.7}
-.result-box{min-height:310px;background:linear-gradient(145deg,#0b281b,#102d20);border:1px solid #204b35;border-radius:22px;padding:24px;display:flex;flex-direction:column;justify-content:center}
-.empty{text-align:center;color:#91aa9b}.empty .spark{font-size:40px;margin-bottom:10px;color:#58dca0}.empty strong{display:block;color:#e9f6eb;font-size:15px;margin-bottom:6px}.empty span{font-size:12px;line-height:1.7}
-.result-top{display:flex;align-items:center;gap:14px;margin-bottom:20px}.result-emoji{width:66px;height:66px;border-radius:20px;background:linear-gradient(145deg,#1b5940,#123a2b);border:1px solid #347354;display:grid;place-items:center;font-size:33px;flex-shrink:0}
-.result-label{font-size:11px;color:#9ab3a4;font-weight:750}.result-name{font-size:29px;letter-spacing:-.05em;font-weight:900;margin-top:3px;color:#f0f8f1}
-.confidence{margin-left:auto;text-align:right}.confidence strong{display:block;font-size:25px;color:#a6f36b}.confidence span{font-size:10px;color:#91aa9b}
-.bar-row{margin:17px 0}.bar-label{display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:800;margin-bottom:8px;color:#dcece0}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -15%,#1b5138 0,transparent 43%),#06150f;color:var(--text);font-family:Inter,system-ui,-apple-system,"Noto Sans KR",sans-serif}
+button{font:inherit}
+main{width:min(1080px,calc(100% - 40px));margin:auto;padding:26px 0 58px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:4px 0 24px;border-bottom:1px solid #1c3b2b}
+.brand{font-size:14px;font-weight:950;letter-spacing:.14em}.brand span{color:var(--mint)}
+.pill{font-size:11px;font-weight:800;color:#a9f4c8;background:#123b2a;border:1px solid #286344;border-radius:99px;padding:8px 13px}
+.hero{display:grid;grid-template-columns:1fr auto;align-items:center;gap:24px;padding:46px 0 34px}
+.eyebrow{color:#79dca6;font-size:10px;font-weight:850;letter-spacing:.22em}
+h1{font-size:clamp(34px,5.2vw,58px);letter-spacing:-.065em;line-height:1.12;margin:12px 0 10px}
+h1 em{font-style:normal;color:var(--lime)}
+.hero p{color:var(--muted);font-size:14px;line-height:1.8;margin:0;max-width:560px}
+.hero-mark{display:flex;gap:10px;align-items:center}
+.species{width:108px;height:112px;border:1px solid #2a543d;background:linear-gradient(145deg,#163e2b,#0c2519);border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px}
+.species b{font-size:30px}.species span{font-size:12px;font-weight:800;color:#dcefe0}
+.steps{display:flex;align-items:center;gap:10px;margin:0 0 14px;color:#8fa99a;font-size:11px;font-weight:750}
+.step{display:flex;align-items:center;gap:8px}.num{width:23px;height:23px;border-radius:50%;display:grid;place-items:center;background:#1b4631;color:#b8f47c;font-size:11px}
+.step-line{height:1px;width:38px;background:#2b4b37}
+.layout{display:grid;grid-template-columns:1fr;gap:16px}
+.panel{background:linear-gradient(145deg,#102b1e,#0b2118);border:1px solid var(--line);border-radius:26px;padding:24px;box-shadow:0 20px 55px #0003}
+.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:18px}
+.panel h2{font-size:17px;margin:0 0 5px;letter-spacing:-.03em}.sub{font-size:12px;color:var(--muted);margin:0;line-height:1.65}
+.upload-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(230px,.75fr);gap:18px;align-items:stretch}
+.drop{min-height:270px;border:1.5px dashed #47775a;border-radius:20px;background:radial-gradient(ellipse at 50% 0%,#1b4930,#0c2419 72%);display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;position:relative;overflow:hidden;transition:.2s}
+.drop.drag{border-color:var(--mint);background:#143b28}
+.drop img{max-width:100%;max-height:340px;object-fit:contain;border-radius:14px;display:none;position:relative;z-index:1}
+.drop-content .big{font-size:42px;margin-bottom:10px}.drop-content strong{display:block;font-size:15px}.drop-content span{display:block;color:var(--muted);font-size:12px;margin-top:7px}
+.upload-side{display:flex;flex-direction:column;justify-content:center;gap:12px;padding:8px 6px}
+.tip{border:1px solid #244b36;background:#0b2118;border-radius:16px;padding:14px}
+.tip b{font-size:12px;display:block;margin-bottom:5px;color:#dff2e2}.tip p{font-size:11px;color:var(--muted);line-height:1.65;margin:0}
+.actions{display:flex;gap:9px}
+.btn{border:0;border-radius:13px;padding:13px 16px;font-weight:850;font-size:13px;cursor:pointer;transition:.15s}
+.btn:active{transform:scale(.98)}.btn-primary{background:linear-gradient(100deg,var(--lime),var(--mint));color:#062016;flex:1;box-shadow:0 7px 20px #16d6a133}
+.btn-secondary{background:#1a3c2a;color:#e5f2e6;border:1px solid #315b40}.btn:disabled{opacity:.38;cursor:not-allowed}
+input[type=file]{display:none}
+.hint{font-size:10px;color:#829d8b;line-height:1.6;margin:0}
+.status{display:none;font-size:11px;color:#a9c1b1;line-height:1.6}.status.show{display:block}.status.error{color:#ff9b88}
+.result-panel{min-height:210px}
+.result-box{min-height:155px;background:#091d14;border:1px solid #1e422e;border-radius:19px;padding:22px;display:flex;flex-direction:column;justify-content:center}
+.empty{text-align:center;color:var(--muted)}.empty .spark{font-size:30px;color:#65dca1;margin-bottom:7px}.empty strong{display:block;color:#e8f5e9;font-size:14px;margin-bottom:5px}.empty span{font-size:11px;line-height:1.7}
+.result-top{display:flex;align-items:center;gap:14px;margin-bottom:18px}.result-emoji{width:60px;height:60px;border-radius:18px;background:#173f2b;border:1px solid #326447;display:grid;place-items:center;font-size:31px;flex-shrink:0}
+.result-label{font-size:11px;color:var(--muted);font-weight:750}.result-name{font-size:27px;letter-spacing:-.05em;font-weight:900;margin-top:3px}
+.confidence{margin-left:auto;text-align:right}.confidence strong{display:block;font-size:24px;color:var(--lime)}.confidence span{font-size:10px;color:var(--muted)}
+.bar-row{margin:14px 0}.bar-label{display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:800;margin-bottom:7px;color:#dcece0}
 .track{height:9px;border-radius:99px;background:#203e2e;overflow:hidden}.fill{height:100%;width:0;border-radius:99px;transition:width .55s ease}.fill.otter{background:linear-gradient(90deg,#8de95c,#20d99d)}.fill.weasel{background:linear-gradient(90deg,#f4c276,#d98b4d)}
-.note{font-size:11px;color:#9ab1a2;line-height:1.8;margin-top:18px;padding-top:14px;border-top:1px solid #244a36}
-.status{display:none;font-size:12px;color:#9ab3a4;margin-top:12px;line-height:1.6}.status.show{display:block}.status.error{color:#ff9b88}
-footer{text-align:center;color:#82998a;font-size:11px;margin:30px auto 0;line-height:1.9;max-width:800px;padding:18px 20px;border-top:1px solid #214432}
-@media(max-width:720px){main{padding:20px 14px 38px}nav{margin-bottom:38px}.layout{grid-template-columns:1fr}.panel{padding:18px;border-radius:23px}.drop,.result-box{min-height:250px}.hero p{font-size:13px}.result-name{font-size:26px}}
+.note{font-size:11px;color:#9ab1a2;line-height:1.8;margin-top:15px;padding-top:13px;border-top:1px solid #244a36}
+footer{color:#789282;text-align:center;font-size:10px;line-height:1.8;margin:22px auto 0;max-width:800px}
+@media(max-width:700px){main{width:calc(100% - 28px);padding-top:18px}.hero{grid-template-columns:1fr;padding:32px 0 24px;gap:18px}.hero-mark{justify-content:flex-start}.species{width:88px;height:88px;border-radius:19px}.species b{font-size:25px}.upload-grid{grid-template-columns:1fr}.upload-side{padding:0}.drop{min-height:235px}.panel{padding:17px;border-radius:21px}.panel-head{margin-bottom:14px}.steps{font-size:10px;gap:6px}.step-line{width:18px}.result-top{gap:10px}.result-name{font-size:23px}}
 </style>
 </head>
 <body>
 <main>
-<nav><div class="brand">WILD<span>NOTE</span> <span style="color:#83a995">/ AI FIELD LAB</span></div><div class="pill" id="modelBadge">AI 모델 준비 중</div></nav>
-<section class="hero">
-  <div class="eyebrow">✦ WILDLIFE AI · FIELD IDENTIFIER ✦</div>
-  <h1>수달일까, 족제비일까<span style="color:var(--green)">?</span></h1>
-  <p>사진 속 주인공은 수달일까요, 족제비일까요?<br>이미지를 올리고 AI의 야생동물 분석 결과를 확인해 보세요.</p>
-  <div class="animals"><div class="animal-chip"><span class="emoji">🦦</span> 수달</div><div class="animal-chip"><span class="emoji">🐾</span> 족제비</div></div>
-</section>
+<nav><div class="brand">WILD<span>NOTE</span> <span style="color:#88a895">/ FIELD LAB</span></div><div class="pill" id="modelBadge">AI 모델 준비 중</div></nav>
+<header class="hero">
+  <div><div class="eyebrow">WILDLIFE IMAGE CLASSIFIER</div><h1>사진 한 장으로<br><em>야생동물 탐험</em></h1><p>사진을 올리면 AI가 수달과 족제비 중 어떤 동물의 특징에 더 가까운지 분석해요. 결과는 참고용으로 확인해 주세요.</p></div>
+  <div class="hero-mark"><div class="species"><b>🦦</b><span>수달</span></div><div class="species"><b>🐾</b><span>족제비</span></div></div>
+</header>
+<div class="steps"><div class="step"><span class="num">1</span> 사진 업로드</div><div class="step-line"></div><div class="step"><span class="num">2</span> AI 분석</div><div class="step-line"></div><div class="step"><span class="num">3</span> 결과 확인</div></div>
 <section class="layout">
   <div class="panel">
-    <h2>01. 사진 넣기</h2><p class="sub">동물이 잘 보이는 사진을 선택해 주세요.</p>
-    <div class="drop" id="drop">
-      <div class="drop-content" id="dropContent"><div class="big">📷</div><strong>사진을 여기에 놓아주세요</strong><span>또는 아래 버튼을 눌러 파일 선택</span></div>
-      <img id="preview" alt="선택한 사진 미리보기">
+    <div class="panel-head"><div><h2>분석할 사진을 선택하세요</h2><p class="sub">동물의 얼굴과 몸이 잘 보이는 사진일수록 좋아요.</p></div></div>
+    <div class="upload-grid">
+      <div>
+        <div class="drop" id="drop">
+          <div class="drop-content" id="dropContent"><div class="big">📷</div><strong>사진을 끌어오거나 선택해 주세요</strong><span>JPG · PNG · WEBP 지원</span></div>
+          <img id="preview" alt="선택한 사진 미리보기">
+        </div>
+      </div>
+      <div class="upload-side">
+        <div class="tip"><b>📸 촬영 팁</b><p>동물이 화면에 크게 나오고, 흔들리지 않은 사진을 사용해 보세요. 배경보다 동물 자체가 잘 보이면 분석에 도움이 됩니다.</p></div>
+        <div class="actions"><button class="btn btn-secondary" id="chooseBtn" type="button">사진 선택</button><button class="btn btn-primary" id="predictBtn" type="button" disabled>AI 분석 시작</button></div>
+        <button class="btn btn-secondary" id="resetBtn" type="button" style="width:100%" disabled>다른 사진으로 바꾸기</button>
+        <div class="status" id="status" role="status" aria-live="polite"></div>
+        <p class="hint">최대 10MB · 사진은 서버로 전송되지 않고 이 브라우저에서 분석됩니다.</p>
+      </div>
     </div>
     <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp">
-    <div class="actions"><button class="btn btn-secondary" id="chooseBtn" type="button">사진 선택</button><button class="btn btn-primary" id="predictBtn" type="button" disabled>AI로 분류하기 ↗</button></div>
-    <div class="actions"><button class="btn btn-secondary" id="resetBtn" type="button" style="width:100%" disabled>사진 지우기 / 다시 선택</button></div>
-    <div class="status" id="status" role="status" aria-live="polite"></div>
-    <p class="hint">JPG, PNG, WEBP · 최대 10MB · 사진은 서버로 전송되지 않고 이 브라우저에서 분석됩니다.</p>
   </div>
-  <div class="panel">
-    <h2>02. AI 분석 결과</h2><p class="sub">학습된 두 클래스와 사진의 유사도를 비교해 보여줘요.</p>
-    <div class="result-box" id="resultBox" aria-live="polite"><div class="empty"><div class="spark">✳</div><strong>결과를 기다리고 있어요</strong><span>사진을 선택한 다음<br>‘AI로 분류하기’를 눌러주세요.</span></div></div>
+  <div class="panel result-panel">
+    <div class="panel-head"><div><h2>AI 분석 결과</h2><p class="sub">분석을 시작하면 이곳에 결과가 표시됩니다.</p></div></div>
+    <div class="result-box" id="resultBox" aria-live="polite"><div class="empty"><div class="spark">✳</div><strong>아직 분석한 사진이 없어요</strong><span>사진을 선택하고 AI 분석을 시작해 주세요.</span></div></div>
   </div>
 </section>
-<footer>기타 판별 안내: 두 클래스 중 최고 점수가 95% 미만이면 ‘판별 보류’로 표시합니다. 다만 다른 대상도 높은 점수가 나올 수 있어 완전한 기타 판별은 아닙니다.<br>표시된 퍼센트는 두 클래스 안에서의 모델 점수이며, 실제 정답 확률이나 종 판정의 확실성을 뜻하지 않습니다.<br>AI의 예측은 참고용이며, 야생동물의 종을 확정하는 전문 감정은 아닙니다.</footer>
+<footer>이 모델은 수달과 족제비 두 종류만 학습했습니다. 95% 미만의 점수는 ‘판별 보류’로 표시하지만, 다른 대상도 높은 점수가 나올 수 있습니다. 표시된 점수는 실제 정답 확률이 아닙니다.</footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.4/dist/teachablemachine-image.min.js"></script>
