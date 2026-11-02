@@ -63,7 +63,7 @@ footer{text-align:center;color:#7a8c83;font-size:11px;margin-top:26px;line-heigh
     <div class="result-box" id="resultBox" aria-live="polite"><div class="empty"><div class="spark">✳</div><strong>결과를 기다리고 있어요</strong><span>사진을 선택한 다음<br>‘AI로 분류하기’를 눌러주세요.</span></div></div>
   </div>
 </section>
-<footer>중요: 이 모델은 수달과 족제비 두 종류만 학습했습니다. 다른 동물이나 사물 사진도 둘 중 하나로 분류할 수 있어요.<br>표시된 퍼센트는 두 클래스 안에서의 모델 점수이며, 실제 정답 확률이나 종 판정의 확실성을 뜻하지 않습니다.<br>AI의 예측은 참고용이며, 야생동물의 종을 확정하는 전문 감정은 아닙니다.</footer>
+<footer>기타 판별 안내: 두 클래스 중 최고 점수가 95% 미만이면 ‘판별 보류’로 표시합니다. 다만 다른 대상도 높은 점수가 나올 수 있어 완전한 기타 판별은 아닙니다.<br>표시된 퍼센트는 두 클래스 안에서의 모델 점수이며, 실제 정답 확률이나 종 판정의 확실성을 뜻하지 않습니다.<br>AI의 예측은 참고용이며, 야생동물의 종을 확정하는 전문 감정은 아닙니다.</footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.4/dist/teachablemachine-image.min.js"></script>
@@ -157,15 +157,19 @@ $('predictBtn').onclick=async()=>{
 function renderResult(preds){
   if(!preds||!preds.length){status('분석 결과를 받지 못했어요. 다시 시도해 주세요.', 'error');return;}
   const best=preds[0], name=best.className||'분류 결과';
-  const otter=name.includes('수달'), emoji=otter?'🦦':'🐾';
   const percent=Math.round(best.probability*100);
   const close=preds.length>1&&Math.abs(preds[0].probability-preds[1].probability)<0.15;
+  // 현재 두 클래스 모델의 점수가 95% 미만이면 확정 대신 판별 보류로 안내합니다.
+  // 이는 보수적인 안내 기준일 뿐, 학습되지 않은 대상을 정확히 검출하는 기능은 아닙니다.
+  const uncertain=best.probability<0.95;
+  const otter=name.includes('수달'), emoji=uncertain?'❔':(otter?'🦦':'🐾');
+  const displayName=uncertain?'판별 보류':name;
   const bars=preds.map(p=>{
     const isOtter=(p.className||'').includes('수달');
     const colorClass=isOtter?'otter':'weasel';
     return '<div class="bar-row"><div class="bar-label"><span>'+escapeHtml(p.className)+'</span><span>'+(p.probability*100).toFixed(1)+'%</span></div><div class="track"><div class="fill '+colorClass+'" style="width:'+(p.probability*100).toFixed(1)+'%"></div></div></div>';
   }).join('');
-  $('resultBox').innerHTML='<div class="result-top"><div class="result-emoji">'+emoji+'</div><div><div class="result-label">AI가 더 가깝다고 본 클래스</div><div class="result-name">'+escapeHtml(name)+'</div></div><div class="confidence"><strong>'+percent+'%</strong><span>모델 점수</span></div></div>'+bars+'<div class="note">'+(close?'두 클래스의 점수가 비슷해요. 사진을 더 선명하게 찍어 다시 확인해 보세요. ':'')+'이 모델은 수달·족제비만 학습했기 때문에 다른 대상도 둘 중 하나로 표시할 수 있어요. 점수는 실제 정답 확률이 아니며, 결과는 참고용으로만 활용해 주세요.</div>';
+  $('resultBox').innerHTML='<div class="result-top"><div class="result-emoji">'+emoji+'</div><div><div class="result-label">'+(uncertain?'수달·족제비로 확신하기 어려워요':'AI가 더 가깝다고 본 클래스')+'</div><div class="result-name">'+escapeHtml(displayName)+'</div></div><div class="confidence"><strong>'+percent+'%</strong><span>모델 점수</span></div></div>'+bars+'<div class="note">'+(uncertain?'수달·족제비 중 어느 쪽이라고 보기 어려워 판별을 보류했어요. 다른 동물·사물일 수도 있고, 사진이 흐리거나 동물이 작게 나온 경우일 수도 있어요. ':'')+(close?'두 클래스의 점수가 비슷해요. 사진을 더 선명하게 찍어 다시 확인해 보세요. ':'')+'주의: 이 모델은 두 종류만 학습했으므로 95% 이상 점수가 나오는 다른 대상도 있을 수 있어요. 이 기준은 완전한 기타 판별기가 아니며, 실제 기타 클래스를 구분하려면 기타 이미지로 모델을 추가 학습해야 합니다.</div>';
 }
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 loadModel();
